@@ -1,30 +1,18 @@
-
+!pip install streamlit
 import streamlit as st
 import pickle
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 
+model_A=pickle.load(open('/content/drive/MyDrive/Grammys/Grammys2/model_Aa.pkl','rb'))
 
-    # Function to load the model
-def load_model():
-    # Use a raw string (prefix with 'r') or double backslashes to avoid escape character issues
-    model_path = r'/content/drive/MyDrive/Grammys/Grammys2/model_Aa.pkl'
+ 
 
-    # Load the model
-    model_A = pickle.load(open(model_path, 'rb'))
-    return model_A
+def get_prediction(user_input) :
 
-# Function to get predictions based on user input
-def get_prediction(user_input, model_A):
-    # Make sure user_input is a DataFrame with the same columns as your training data
-    
-    # Check if the model is fitted
-    if hasattr(model_A, 'predict'):
-        # Make predictions
-        prediction = model_A.predict(user_input)
-        return prediction
-    else:
-        raise ValueError("The model is not fitted. Please fit the model before making predictions.")
+    prediction=model_A.predict(user_input)
+
+    return prediction
 
 # Streamlit app
 
@@ -32,57 +20,55 @@ def main():
     st.title('grammy_prediction_app')
 
     # Collect user input for dependent variables
-    Age = st.number_input("Insert artist's age", None)
-    Usersscore = st.number_input("Insert the users score", None, placeholder="Type a float between 0 and 10")
-    Criticscore = st.number_input("Insert the Critic score", None, placeholder="Type an int between 0 and 100")
-    st.write("Select artist's ethnicity")
+    Age = st.number_input("Insert artist's age", value=20)
+    Usersscore = st.number_input("Insert the users score", value=7.9, placeholder="Type a float between 0 and 10")
+    Criticscore = st.number_input("Insert the Critic score", value=77, placeholder="Type a int between 0 and 100")
+    st.write("Select artist's ehtnicity")
     Ethnicity_1 = st.checkbox('black')
-    Ethnicity_2 = st.checkbox('white')
-    Ethnicity_3 = st.checkbox('polynesian')
+    Ethnicity_2= st.checkbox('white')
+    Ethnicity_3 = st.checkbox('polynisan')
     Ethnicity_4 = st.checkbox('mixed')
     Ethnicity_5 = st.checkbox('asian')
     Ethnicity_6 = st.checkbox('latin')
     st.write("Select artist's gender")
-    Gender_Female = st.checkbox('Female')
-    Gender_Male = st.checkbox('Male')
-    Gender_NB = st.checkbox('NB')
+    GENDER = st.checkbox('Female')
+    GENDER = st.checkbox('Male')
+    GENDER = st.checkbox('NB')
 
     # Create a DataFrame with user input
     user_input = pd.DataFrame({
         'Age of win': [Age],
-        'GENDERS': ['Female' if Gender_Female else None,
-                    'Male' if Gender_Male else None,
-                    'NB' if Gender_NB else None],
-        'Ethnicity': ['black' if Ethnicity_1 else None,
-                      'white' if Ethnicity_2 else None,
-                      'polynesian' if Ethnicity_3 else None,
-                      'mixed' if Ethnicity_4 else None,
-                      'asian' if Ethnicity_5 else None,
-                      'latin' if Ethnicity_6 else None],
+        'GENDERS': [1 if st.checkbox('Female') else 0],
+        'GENDERS': [0 if st.checkbox('Male') else 0],
+        'GENDERS': [2 if st.checkbox('NB') else 0],
+        'Ethnicity': [0 if st.checkbox('black') else 1],
+        'Ethnicity': [1 if st.checkbox('white') else 1],
+        'Ethnicity': [3 if st.checkbox('asian') else 1],
+        'Ethnicity': [5 if st.checkbox('polynisian') else 1],
+        'Ethnicity': [2 if st.checkbox('mixed') else 1],
+        'Ethnicity': [4 if st.checkbox('latin') else 1],
         'Users score': [Usersscore],
         'Critic score': [Criticscore],
+        
     })
 
-    # Display user input
+# Display user input
     st.subheader('User Input:')
     st.write(user_input)
-
-    # Load the model
-    model_A = load_model()
 
     # Train the model (if not done before)
     # model_A.fit(X_train, y_train)  # Replace X_train and y_train with your training data
 
     # Get prediction
-    prediction = get_prediction(user_input, model_A)
+    prediction = get_prediction(user_input)
 
     A0_html = """
-      <div style="background-color:#F4D03F;padding:10px;">
+      <div style="background-color:#F4D03F;padding:10px >
        <h2 style="color:white;text-align:center;"> Null</h2>
        </div>
     """
     A0_A1_html = """
-      <div style="background-color:#F4D03F;padding:10px;">
+      <div style="background-color:#F4D03F;padding:10px >
        <h2 style="color:white;text-align:center;"> One</h2>
        </div>
     """
@@ -99,3 +85,5 @@ def main():
             st.markdown(A0_A1_html, unsafe_allow_html=True)
             st.write("The model isn't predicting a win")
 
+if __name__ == '__main__':
+    main()
