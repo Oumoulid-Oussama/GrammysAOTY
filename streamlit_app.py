@@ -217,7 +217,7 @@ print('Most Similar Album and Artist(s):')
 print(additional_info)
 
 
-!pip install streamlit
+
 import streamlit as st
 import pickle
 import pandas as pd
