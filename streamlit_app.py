@@ -34,38 +34,41 @@ def main():
     # Collect user input for dependent variables
     Age = st.number_input("Insert artist's age", None)
     Usersscore = st.number_input("Insert the users score", None, placeholder="Type a float between 0 and 10")
-    Criticscore = st.number_input("Insert the Critic score", None, placeholder="Type a int between 0 and 100")
-    st.write("Select artist's ehtnicity")
+    Criticscore = st.number_input("Insert the Critic score", None, placeholder="Type an int between 0 and 100")
+    st.write("Select artist's ethnicity")
     Ethnicity_1 = st.checkbox('black')
-    Ethnicity_2= st.checkbox('white')
-    Ethnicity_3 = st.checkbox('polynisan')
+    Ethnicity_2 = st.checkbox('white')
+    Ethnicity_3 = st.checkbox('polynesian')
     Ethnicity_4 = st.checkbox('mixed')
     Ethnicity_5 = st.checkbox('asian')
     Ethnicity_6 = st.checkbox('latin')
     st.write("Select artist's gender")
-    GENDER = st.checkbox('Female')
-    GENDER = st.checkbox('Male')
-    GENDER = st.checkbox('NB')
+    Gender_Female = st.checkbox('Female')
+    Gender_Male = st.checkbox('Male')
+    Gender_NB = st.checkbox('NB')
 
     # Create a DataFrame with user input
     user_input = pd.DataFrame({
         'Age of win': [Age],
-        'GENDERS': ['Female' if st.checkbox('Female') else None],
-        'GENDERS': ['Male' if st.checkbox('Male') else None],
-        'GENDERS': ['NB' if st.checkbox('NB') else None],
-        'Ethnicity': ['white' if st.checkbox('white') else None],
-        'Ethnicity': ['asian' if st.checkbox('asian') else None],
-        'Ethnicity': ['polynisian' if st.checkbox('polynisian') else None],
-        'Ethnicity': ['mixed' if st.checkbox('mixed') else None],
-        'Ethnicity': ['latin' if st.checkbox('latin') else None],
+        'GENDERS': ['Female' if Gender_Female else None,
+                    'Male' if Gender_Male else None,
+                    'NB' if Gender_NB else None],
+        'Ethnicity': ['black' if Ethnicity_1 else None,
+                      'white' if Ethnicity_2 else None,
+                      'polynesian' if Ethnicity_3 else None,
+                      'mixed' if Ethnicity_4 else None,
+                      'asian' if Ethnicity_5 else None,
+                      'latin' if Ethnicity_6 else None],
         'Users score': [Usersscore],
         'Critic score': [Criticscore],
-        
     })
 
-# Display user input
+    # Display user input
     st.subheader('User Input:')
     st.write(user_input)
+
+    # Load the model
+    model_A = load_model()
 
     # Train the model (if not done before)
     # model_A.fit(X_train, y_train)  # Replace X_train and y_train with your training data
@@ -74,12 +77,12 @@ def main():
     prediction = get_prediction(user_input, model_A)
 
     A0_html = """
-      <div style="background-color:#F4D03F;padding:10px >
+      <div style="background-color:#F4D03F;padding:10px;">
        <h2 style="color:white;text-align:center;"> Null</h2>
        </div>
     """
     A0_A1_html = """
-      <div style="background-color:#F4D03F;padding:10px >
+      <div style="background-color:#F4D03F;padding:10px;">
        <h2 style="color:white;text-align:center;"> One</h2>
        </div>
     """
@@ -95,3 +98,4 @@ def main():
         else:
             st.markdown(A0_A1_html, unsafe_allow_html=True)
             st.write("The model isn't predicting a win")
+
