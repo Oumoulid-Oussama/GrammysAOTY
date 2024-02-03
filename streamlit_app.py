@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
     # Function to load the model
 def load_model():
     # Use a raw string (prefix with 'r') or double backslashes to avoid escape character issues
-    model_path = r'/content/drive/MyDrive/Grammys/Grammys2/logit_model.pkl'
+    model_path = r'/content/drive/MyDrive/Grammys/Grammys2/model_Aa.pkl'
 
     # Load the model
     model_A = pickle.load(open(model_path, 'rb'))
