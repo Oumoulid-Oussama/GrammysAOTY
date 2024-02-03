@@ -12,7 +12,6 @@ import statsmodels.api as sm
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
-%matplotlib inline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_curve, auc
 
